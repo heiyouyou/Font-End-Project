@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title>光晕效果</title>
+<style type="text/css">
+	* {margin:0;padding:0;}
+	body{font-size:12px;font-family:"微软雅黑";background:#111;overflow:hidden;}
+	ul,li{list-style:none;}
+	a{text-decoration:none;}
+	img{vertical-align:top;}
+	.wrap{width:100px;height:100px;margin:300px auto;}
+	.box{position:relative;}
+	.box a{display:block;width:100px;height:100px;position:relative;background:red;border-radius:50%;text-align:center;line-height:100px;color:#fff;z-index:2;}
+	.box .gy{position:absolute;top:0;left:0;width:100%;height:100%;background:#fff;border-radius:50%;z-index:1;animation:move 1s ease-in-out infinite /*alternate*/;}
+	.gy.move3{animation:move4 2s ease-in-out;}
+	/*关键帧*/
+	/*放大淡出*/
+	@keyframes move{
+		from{transform:scale(1);opacity:1;}
+		to{transform:scale(1.2);opacity:0;}
+	}
+	/*放大平移*/
+	@keyframes move1{
+		from{transform:scale(1) translateX(0px);}
+		to{transform:scale(1.2) translateX(300px);}
+	}
+	/*旋转放大平移*/
+	@keyframes move2{
+		from{transform:rotate(0deg) scale(1) translateX(0px);}
+		to{transform:rotate(360deg) scale(1.2) translateX(200px);}
+	}
+	/*放大平移变形淡入*/
+	@keyframes move3{
+		0%{transform: scale(1) translateX(0px) skewX(20deg);opacity:0}
+		50%{transform: scale(2) translateX(-300px) skewX(30deg);opacity:0.5}
+		75%{transform: scale(1) translateX(0px) skewX(0deg);opacity:0.8}
+		100%{transform:scale(6) translateX(300px) skewX(-30deg);opacity:1} 
+	}
+	@keyframes move4{
+		0%{transform:scale(1) rotate(0deg);}
+		100%{transform:scale(6) rotate(360deg);opacity:0;}
+	}
+</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="box">
+			<a href="javascript:void(0);" id="clickme">点我</a>
+			<span class="gy"></span>
+		</div>
+	</div>
+	<script type="text/javascript">
+		window.onload = function(){
+			var  arr = [];
+			var clickmeDom = document.getElementById("clickme");
+			var timer = setInterval(function(){
+				clickmeDom.style.background = "radial-gradient("+randomColor16()+","+randomColor16()+")";
+			},1000);
+			clickmeDom.onclick = function(){
+				clearInterval(timer);
+				var spanDom = document.createElement("span");
+				spanDom.className = "gy move3";
+				this.style.background = "radial-gradient("+randomColor16()+","+randomColor16()+")";
+				spanDom.style.background = "linear-gradient("+randomColor16()+","+randomColor16()+")";
+				var pDom = this.parentElement;
+				pDom.appendChild(spanDom);
+				arr.push(spanDom);
+				setTimeout(function(){
+					var index = arr.indexOf(spanDom);
+					pDom.removeChild(arr.splice(index,1)[0]);
+				},2000);
+			};
+			//随机rgb颜色
+			function randomColor(){
+				var r = Math.floor(Math.random()*256);
+				var g = Math.floor(Math.random()*256);
+				var b = Math.floor(Math.random()*256);
+				return "rgb("+r+","+g+","+b+")";
+			};
+			//随机十六进制颜色
+			function randomColor16(){
+				var r = Math.floor(Math.random()*256).toString(16);
+				var g = Math.floor(Math.random()*256).toString(16);
+				var b = Math.floor(Math.random()*256).toString(16);
+				return "#"+r+g+b;
+			};
+		};
+	</script>
+</body>
+</html>
